@@ -55,11 +55,11 @@ update_time()
 
 
 def run_winerrors():
-	subprocess.run("root\\System\\apps\\WinErrors.exe")
+	subprocess.run("root/System/apps/WinErrors.pea")
 
 
 def run_audCDplay():
-	subprocess.run("root\\System\\apps\\AudioCDplayer.exe")
+	subprocess.run("root/System/apps/AudioCDplayer.pea")
 
 
 def parameters() -> None:
@@ -195,13 +195,26 @@ def explorer() -> None:
 		picked = dir_list.get(dir_list.curselection()[0])
 		path = gt(current_path.get(), picked)
 
-		if os.path.isfile(path):
-			if path.endswith(".exe"):
-				subprocess.run(path)
+
+		def touch(file_path: str) -> None:
+			"""
+			Open/Run file
+			:param file_path:
+			:type file_path:
+			"""
+			if os.path.isfile(file_path):
+				if file_path.endswith(".pea"):
+					subprocess.run(file_path)
+				elif file_path.endswith(".lnk"):
+					with open(file_path, encoding="utf-8") as f:
+						touch(f.readlines()[0].rstrip())
+				else:
+					text_main_start(file_path, False)
 			else:
-				text_main_start(path, False)
-		else:
-			current_path.set(path)
+				current_path.set(file_path)
+
+
+		touch(path)
 
 
 	def go_back(*event):

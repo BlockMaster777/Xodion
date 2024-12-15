@@ -126,15 +126,3 @@ def main_start(path: str, is_new: bool) -> None:
 
 	if not is_new:
 		open_with(path)
-
-# def run(*event) -> None:
-# 	"""
-# 	Run the code
-# 	:param event:
-# 	"""
-# 	with open("run.py", "w", encoding="utf-8") as f:
-# 		f.write(editarea.get("1.0", END))
-#
-# 	os.system('start cmd /K "python run.py"')
-
-#
