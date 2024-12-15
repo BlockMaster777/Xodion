@@ -54,14 +54,6 @@ time.pack(padx=10, side="right")
 update_time()
 
 
-def run_winerrors():
-	subprocess.run("root/System/apps/WinErrors.pea")
-
-
-def run_audCDplay():
-	subprocess.run("root/System/apps/AudioCDplayer.pea")
-
-
 def parameters() -> None:
 	"""
 	Param window
@@ -120,7 +112,7 @@ def info() -> None:
 	inf_win.attributes("-topmost", True)
 	inf_win.iconbitmap("root/System/icons/info.ico")
 	tk.Label(inf_win, font=font, text=(
-		"Plasma OS Visual V 2.5\nОт Plasm Inc." if lang == "ru" else "Plasma OS Visual\nV 2.3\nBy Plasm Inc.")).pack()
+		"Plasma OS Visual V 2.6.5\nОт Plasm Inc." if lang == "ru" else "Plasma OS Visual\nV 2.6.5\nBy Plasm Inc.")).pack()
 
 
 #
@@ -307,14 +299,6 @@ buttons = [tk.Button(panel, font=font, text=("Параметры" if lang == "ru
            tk.Button(panel, font=font, text=("Информация" if lang == "ru" else "Information"), command=info),
            tk.Button(panel, font=font, text=("Завершение работы" if lang == "ru" else "Shutdown"), command=shd),
            tk.Button(panel, font=font, text=("Проводник" if lang == "ru" else "Explorer"), command=explorer)]
-
-# Ярлык для игры WinErrors
-WinErrors = tk.Button(root, font=font, text="WinErrors", command=run_winerrors)
-WinErrors.place(x=50, y=30)
-
-# Ярлык для AudioCDplayer
-acdp = tk.Button(root, font=font, text="Plasma Audio CD Player", command=run_audCDplay)
-acdp.place(y=30, x=150)
 
 for button in buttons:
 	button.pack(side="left", anchor="sw")
