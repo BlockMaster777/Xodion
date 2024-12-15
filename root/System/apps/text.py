@@ -26,7 +26,7 @@ def main_start(path: str, is_new: bool) -> None:
 	text_ed_win = tkinter.Tk()
 	text_ed_win.geometry("700x500")
 	text_ed_win.title("PlasmaText")
-	window_par.attributes("-topmost", True)
+	text_ed_win.attributes("-topmost", True)
 	text_ed_win.iconbitmap("root/System/icons/plasmtext.ico")
 	prText = ""
 
