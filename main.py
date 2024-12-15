@@ -15,7 +15,7 @@ from tkinter import colorchooser
 import pygame
 
 from plasma_core import *
-# from root.System.apps.text import open_with as text_open
+from root.System.apps.text import main_start as text_main_start
 from settings import *
 
 ctypes.windll.shcore.SetProcessDpiAwareness(True)
@@ -67,15 +67,15 @@ def parameters() -> None:
 	Param window
 	"""
 	global lang
-	
+
 	window_par = tk.Toplevel(root)
 	window_par.title(("Параметры" if lang == "ru" else "Parameters"))
 	window_par.geometry("300x100")
 	window_par.resizable(False, False)
 	window_par.attributes("-topmost", True)
 	window_par.iconbitmap("root/System/icons/settings.ico")
-	
-	
+
+
 	def choice_color() -> None:
 		"""
 		Choice color
@@ -83,30 +83,29 @@ def parameters() -> None:
 		color: tuple = colorchooser.askcolor(title=("Выбор цвета" if lang == "ru" else "Choice color"))
 		save_settings("bg_color", color[1])
 		root.configure(bg=color[1])
-	
-	
+
+
 	def choice_lang() -> None:
 		"""""
 		Choice language
 		"""
 		global lang
-		
+
 		if lang == "en":
 			lang = "ru"
 		if lang == "ru":
 			lang = "en"
 		save_settings("lang", lang)
-	
-	
+
+
 	tk.Label(window_par, text=("Задний фон" if lang == "ru" else "Background"), font=font).place(x=10, y=5)
-	tk.Button(window_par, font=font, text=("Выбор цвета" if lang == "ru" else "Choice color"), command=choice_color
-	          ).place(x=10, y=30)
+	tk.Button(window_par, font=font, text=("Выбор цвета" if lang == "ru" else "Choice color"),
+	          command=choice_color).place(x=10, y=30)
 	tk.Label(window_par, text=("Язык" if lang == "ru" else "Language"), font=font).place(x=100, y=5)
-	tk.Label(window_par, text=("Перезапустите для применения" if lang == "ru" else "Restart to apply"), font=font
-	         ).place(x=100, y=55)
+	tk.Label(window_par, text=("Перезапустите для применения" if lang == "ru" else "Restart to apply"),
+	         font=font).place(x=100, y=55)
 	tk.Button(window_par, font=font, text=("English" if lang == "ru" else "Русский"), command=choice_lang).place(x=100,
-	                                                                                                             y=30
-	                                                                                                             )
+	                                                                                                             y=30)
 
 
 def info() -> None:
@@ -121,8 +120,7 @@ def info() -> None:
 	inf_win.attributes("-topmost", True)
 	inf_win.iconbitmap("root/System/icons/info.ico")
 	tk.Label(inf_win, font=font, text=(
-		"Plasma OS Visual V 2.5\nОт Plasm Inc." if lang == "ru" else "Plasma OS Visual\nV 2.3\nBy Plasm Inc.")
-	         ).pack()
+		"Plasma OS Visual V 2.5\nОт Plasm Inc." if lang == "ru" else "Plasma OS Visual\nV 2.3\nBy Plasm Inc.")).pack()
 
 
 #
@@ -141,11 +139,11 @@ def explorer() -> None:
 	exp_win.resizable(False, False)
 	exp_win.geometry('400x250')
 	exp_win.iconbitmap("root/System/icons/explorer.ico")
-	
+
 	new_file_name = tk.StringVar(exp_win, "", 'new_name')
 	current_path = tk.StringVar(exp_win, "root", 'current_path')
-	
-	
+
+
 	def path_change(*event):
 		"""
 		Path changer
@@ -153,43 +151,42 @@ def explorer() -> None:
 		"""
 		directory = ls(current_path.get())
 		dir_list.delete(0, tk.END)
-		
+
 		for file in directory:
 			dir_list.insert(0, file)
-	
-	
+
+
 	def rename():
 		"""
 		rename func
 		"""
-		
-		
+
+
 		def newname():
-			ren(file.get(), new_name.get())
-			path_change(file.get())
-		
-		
+			ren(ren_file.get(), ren_new_name.get())
+			path_change(ren_file.get())
+
+
 		ren_win = tk.Toplevel(exp_win)
 		ren_win.title("Переименовать" if lang == "ru" else "Rename")
-		
-		new_name = tk.StringVar(ren_win, "", 'new name')
-		file = tk.StringVar(ren_win, "", 'path')
-		label = tk.Label(ren_win, font=font, text=(
-			"Введите путь файла для переименования" if lang == "ru" else "Enter the file path for rename")
-		                 )
-		label.pack()
-		renfile = tk.Entry(ren_win, textvariable=file)
-		renfile.pack()
-		labelname = tk.Label(ren_win, font=font,
-		                     text=("Введите новое название" if lang == "ru" else "Enter the new name")
-		                     )
-		labelname.pack()
-		renname = tk.Entry(ren_win, textvariable=new_name)
-		renname.pack()
-		button = tk.Button(ren_win, font=font, text=("Переименовать" if lang == "ru" else "Rename"), command=newname)
-		button.pack()
-	
-	
+
+		ren_new_name = tk.StringVar(ren_win, "", 'ren_new_name')
+		ren_file = tk.StringVar(ren_win, "", 'path')
+		ren_path_label = tk.Label(ren_win, font=font, text=(
+			"Введите путь файла для переименования" if lang == "ru" else "Enter the file path for rename"))
+		ren_path_label.pack()
+		ren_entry_file = tk.Entry(ren_win, textvariable=ren_file)
+		ren_entry_file.pack()
+		ren_label_name = tk.Label(ren_win, font=font,
+		                          text=("Введите новое название" if lang == "ru" else "Enter the new name"))
+		ren_label_name.pack()
+		ren_entry_name = tk.Entry(ren_win, textvariable=ren_new_name)
+		ren_entry_name.pack()
+		ren_button = tk.Button(ren_win, font=font, text=("Переименовать" if lang == "ru" else "Rename"),
+		                       command=newname)
+		ren_button.pack()
+
+
 	def change_path_by_click(*event):
 		"""
 		Changes path by clicking on element
@@ -197,17 +194,16 @@ def explorer() -> None:
 		"""
 		picked = dir_list.get(dir_list.curselection()[0])
 		path = gt(current_path.get(), picked)
-		
+
 		if os.path.isfile(path):
 			if path.endswith(".exe"):
 				subprocess.run(path)
 			else:
-				# text_open(path)
-				pass
+				text_main_start(path, False)
 		else:
 			current_path.set(path)
-	
-	
+
+
 	def go_back(*event):
 		"""
 		Goes back in files
@@ -218,8 +214,8 @@ def explorer() -> None:
 			current_path.set(new_path)
 		except OSError:
 			pass
-	
-	
+
+
 	def window_new_file_or_folder():
 		"""
 		Window to create new file
@@ -230,8 +226,8 @@ def explorer() -> None:
 		new_win.resizable(False, False)
 		new_win.attributes("-topmost", True)
 		new_win.title(("Новый объект" if lang == "ru" else "New object"))
-		
-		
+
+
 		def new_file_or_folder():
 			"""
 			Func that makes a new object
@@ -240,42 +236,42 @@ def explorer() -> None:
 				cr(gt(current_path.get(), new_file_name.get(), ignore_ex=True))
 			else:
 				mdir(gt(current_path.get(), new_file_name.get(), ignore_ex=True))
-			
+
 			new_win.destroy()
 			path_change()
-		
-		
+
+
 		tk.Label(new_win, text=("Введите название" if lang == "ru" else "Enter name")).place(x=10, y=5)
 		tk.Entry(new_win, textvariable=new_file_name).place(x=10, y=30)
 		tk.Button(new_win, text=("Создать" if lang == "ru" else "Create"), command=new_file_or_folder).place(x=10, y=60)
-	
-	
+
+
 	def dir_popup(event=None) -> None:
 		"""
 		Popup menu
 		:param event:
 		"""
 		dir_menu.post(event.x_root, event.y_root)
-	
-	
+
+
 	dir_menu = tk.Menu(tearoff=0)
 	dir_menu.add_command(label=("Переименовать" if lang == "ru" else "Rename"), command=rename)
 	dir_menu.add_command(label=("Создать" if lang == "ru" else "Create"), command=window_new_file_or_folder)
 	dir_menu.add_command(label=("Назад" if lang == "ru" else "Back"), command=go_back)
-	
+
 	current_path.trace('w', path_change)
-	
+
 	tk.Button(exp_win, text=("Назад" if lang == "ru" else "Back"), command=go_back).place(x=5, y=5)
-	
+
 	tk.Entry(exp_win, textvariable=current_path).place(x=65, y=10)
-	
+
 	dir_list = tk.Listbox(exp_win)
 	dir_list.place(x=5, y=40)
-	
+
 	dir_list.bind('<Double-1>', change_path_by_click)
 	dir_list.bind('<Return>', change_path_by_click)
 	dir_list.bind('<Button-3>', dir_popup)
-	
+
 	path_change("root")
 
 
