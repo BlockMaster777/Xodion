@@ -1,30 +1,38 @@
 # coding=utf-8
 """"
+
+Plasma OS Visual
+
 Settings module
+
+Made by Plasm inc.
+
 """
+
+
 def save_settings(setting: str, val: int or str) -> None:
 	""""
 	Save settings in settings.properties
-	:param val:
-	:param setting:
+	:param val: Value of setting
+	:param setting: Name of setting
 	"""
-	with open("root/System/settings.properties", encoding="utf-8") as f:
+	with open("../settings.properties", encoding="utf-8") as f:
 		lines = f.readlines()
 		for i, line in enumerate(lines):
 			if line.startswith(setting + '='):
 				lines[i] = f"{setting}={val}\n"
 				break
 
-	with open("root/System/settings.properties", "w", encoding="utf-8") as f:
+	with open("../settings.properties", "w", encoding="utf-8") as f:
 		f.writelines(lines)
 
 
 def get_setting(setting: str) -> str:
 	""""
 	Get setting in settings.properties
-	:param setting:
+	:param setting: Name of setting
 	"""
-	with open("root/System/settings.properties", encoding="utf-8") as f:
+	with open("../settings.properties", encoding="utf-8") as f:
 		lines = f.readlines()
 		for i, line in enumerate(lines):
 			line_s = line.split("=")

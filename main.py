@@ -3,9 +3,12 @@
 
 Plasma OS Visual
 
+Main file
+
 Made by Plasm inc.
 
 """
+# Imports
 import ctypes
 import subprocess
 import tkinter as tk
@@ -14,26 +17,33 @@ from tkinter import colorchooser
 
 import pygame
 
-from plasma_core import *
 from root.System.apps.text import main_start as text_main_start
-from settings import *
+from root.System.sysModules.plasma_core import *
+from root.System.sysModules.settings import *
 
+# Quality
 ctypes.windll.shcore.SetProcessDpiAwareness(True)
 
+# Main window
 root = tk.Tk()
 root.title("Plasma")
 root.geometry("1000x500")
 root.attributes("-fullscreen", True)
 root.iconbitmap("root/System/icons/plasma.ico")
 
+# Constants
 font = "Arial 10"
 lang = get_setting("lang")
 
+# Down panel
 panel = tk.Frame(root)
 panel.pack(side='bottom', fill="x")
 
 
 def shd():
+	"""
+	Quit function
+	"""
 	pygame.mixer.init()
 	pygame.mixer.music.load("root\\System\\sounds\\tada.wav")
 	pygame.mixer.music.play()
@@ -49,6 +59,7 @@ def update_time():
 	root.after(1000, update_time)
 
 
+# Time label
 time = tk.Label(panel, font=font)
 time.pack(padx=10, side="right")
 update_time()
@@ -70,7 +81,7 @@ def parameters() -> None:
 
 	def choice_color() -> None:
 		"""
-		Choice color
+		Choice color function for bg
 		"""
 		color: tuple = colorchooser.askcolor(title=("Выбор цвета" if lang == "ru" else "Choice color"))
 		save_settings("bg_color", color[1])
@@ -79,7 +90,7 @@ def parameters() -> None:
 
 	def choice_lang() -> None:
 		"""""
-		Choice language
+		Choice language function
 		"""
 		global lang
 
@@ -87,39 +98,32 @@ def parameters() -> None:
 			lang = "ru"
 		if lang == "ru":
 			lang = "en"
+		print(lang)
 		save_settings("lang", lang)
 
 
+	# Param window elements
 	tk.Label(window_par, text=("Задний фон" if lang == "ru" else "Background"), font=font).place(x=10, y=5)
-	tk.Button(window_par, font=font, text=("Выбор цвета" if lang == "ru" else "Choice color"),
-	          command=choice_color).place(x=10, y=30)
+	tk.Button(window_par, font=font, text=("Выбор цвета" if lang == "ru" else "Choice color"), command=choice_color).place(x=10, y=30)
 	tk.Label(window_par, text=("Язык" if lang == "ru" else "Language"), font=font).place(x=100, y=5)
-	tk.Label(window_par, text=("Перезапустите для применения" if lang == "ru" else "Restart to apply"),
-	         font=font).place(x=100, y=55)
-	tk.Button(window_par, font=font, text=("English" if lang == "ru" else "Русский"), command=choice_lang).place(x=100,
-	                                                                                                             y=30)
+	tk.Label(window_par, text=("Перезапустите для применения" if lang == "ru" else "Restart to apply"), font=font).place(x=100, y=55)
+	tk.Button(window_par, font=font, text=("English" if lang == "ru" else "Русский"), command=choice_lang).place(x=100, y=30)
 
 
 def info() -> None:
 	"""
 	Info window
 	"""
+	# TODO move info to parameters window and remove this window
 	global lang
 	inf_win = tk.Toplevel(root)
 	inf_win.title(("Информация" if lang == "ru" else "Information"))
-	inf_win.geometry("300x50")
+	inf_win.geometry("300x100")
 	inf_win.resizable(False, False)
 	inf_win.attributes("-topmost", True)
 	inf_win.iconbitmap("root/System/icons/info.ico")
-	tk.Label(inf_win, font=font, text=(
-		"Plasma OS Visual V 2.6.5\nОт Plasm Inc." if lang == "ru" else "Plasma OS Visual\nV 2.6.5\nBy Plasm Inc.")).pack()
+	tk.Label(inf_win, font=font, text=("Plasma OS Visual V 2.6.5\nОт Plasm Inc." if lang == "ru" else "Plasma OS Visual\nV 2.6.5\nBy Plasm Inc.")).pack()
 
-
-#
-# def pd():
-# 	pygame.mixer.init()
-# 	pygame.mixer.music.load("root\\System\\sounds\\PapiniDochki.wav")
-# 	pygame.mixer.music.play()
 
 def explorer() -> None:
 	"""
@@ -132,6 +136,7 @@ def explorer() -> None:
 	exp_win.geometry('400x250')
 	exp_win.iconbitmap("root/System/icons/explorer.ico")
 
+	# Tk variables
 	new_file_name = tk.StringVar(exp_win, "", 'new_name')
 	current_path = tk.StringVar(exp_win, "root", 'current_path')
 
@@ -150,32 +155,36 @@ def explorer() -> None:
 
 	def rename():
 		"""
-		rename func
+		rename function
 		"""
 
 
 		def newname():
+			"""
+			Function to rename element
+			"""
 			ren(ren_file.get(), ren_new_name.get())
 			path_change(ren_file.get())
 
 
+		# Rename window elements
 		ren_win = tk.Toplevel(exp_win)
 		ren_win.title("Переименовать" if lang == "ru" else "Rename")
+		# TODO make standard settings
+		# TODO make icon for rename and etc.
 
+		# Rename window elements
 		ren_new_name = tk.StringVar(ren_win, "", 'ren_new_name')
 		ren_file = tk.StringVar(ren_win, "", 'path')
-		ren_path_label = tk.Label(ren_win, font=font, text=(
-			"Введите путь файла для переименования" if lang == "ru" else "Enter the file path for rename"))
+		ren_path_label = tk.Label(ren_win, font=font, text=("Введите путь файла для переименования" if lang == "ru" else "Enter the file path for rename"))
 		ren_path_label.pack()
 		ren_entry_file = tk.Entry(ren_win, textvariable=ren_file)
 		ren_entry_file.pack()
-		ren_label_name = tk.Label(ren_win, font=font,
-		                          text=("Введите новое название" if lang == "ru" else "Enter the new name"))
+		ren_label_name = tk.Label(ren_win, font=font, text=("Введите новое название" if lang == "ru" else "Enter the new name"))
 		ren_label_name.pack()
 		ren_entry_name = tk.Entry(ren_win, textvariable=ren_new_name)
 		ren_entry_name.pack()
-		ren_button = tk.Button(ren_win, font=font, text=("Переименовать" if lang == "ru" else "Rename"),
-		                       command=newname)
+		ren_button = tk.Button(ren_win, font=font, text=("Переименовать" if lang == "ru" else "Rename"), command=newname)
 		ren_button.pack()
 
 
@@ -191,8 +200,8 @@ def explorer() -> None:
 		def touch(file_path: str) -> None:
 			"""
 			Open/Run file
-			:param file_path:
-			:type file_path:
+			:param file_path: path to file to touch
+			:type file_path: str
 			"""
 			if os.path.isfile(file_path):
 				if file_path.endswith(".pea"):
@@ -211,21 +220,22 @@ def explorer() -> None:
 
 	def go_back(*event):
 		"""
-		Goes back in files
+		Goes back in file system
+		Cant go outside root directory
 		:param event:
 		"""
 		try:
 			new_path = gt(current_path.get(), back=True)
 			current_path.set(new_path)
-		except OSError:
+		except OSError:  # OSError - cant go outside root directory
+			# TODO make warning
 			pass
 
 
 	def window_new_file_or_folder():
 		"""
-		Window to create new file
+		Window to create new file or directory
 		"""
-		# global new_win
 		new_win = tk.Toplevel(exp_win)
 		new_win.geometry("250x100")
 		new_win.resizable(False, False)
@@ -235,7 +245,7 @@ def explorer() -> None:
 
 		def new_file_or_folder():
 			"""
-			Func that makes a new object
+			Function to make a new object
 			"""
 			if "." in new_file_name.get():
 				cr(gt(current_path.get(), new_file_name.get(), ignore_ex=True))
@@ -246,6 +256,7 @@ def explorer() -> None:
 			path_change()
 
 
+		# Create new window elements
 		tk.Label(new_win, text=("Введите название" if lang == "ru" else "Enter name")).place(x=10, y=5)
 		tk.Entry(new_win, textvariable=new_file_name).place(x=10, y=30)
 		tk.Button(new_win, text=("Создать" if lang == "ru" else "Create"), command=new_file_or_folder).place(x=10, y=60)
@@ -253,19 +264,23 @@ def explorer() -> None:
 
 	def dir_popup(event=None) -> None:
 		"""
-		Popup menu
+		Explorer only popup menu
 		:param event:
 		"""
 		dir_menu.post(event.x_root, event.y_root)
 
 
+	# Explorer only popup menu elements
 	dir_menu = tk.Menu(tearoff=0)
 	dir_menu.add_command(label=("Переименовать" if lang == "ru" else "Rename"), command=rename)
 	dir_menu.add_command(label=("Создать" if lang == "ru" else "Create"), command=window_new_file_or_folder)
 	dir_menu.add_command(label=("Назад" if lang == "ru" else "Back"), command=go_back)
 
+	# Trace path entry changes
 	current_path.trace('w', path_change)
 
+	# Explorer elements
+	# TODO remake design
 	tk.Button(exp_win, text=("Назад" if lang == "ru" else "Back"), command=go_back).place(x=5, y=5)
 
 	tk.Entry(exp_win, textvariable=current_path).place(x=65, y=10)
@@ -273,28 +288,31 @@ def explorer() -> None:
 	dir_list = tk.Listbox(exp_win)
 	dir_list.place(x=5, y=40)
 
+	# Hotkey binds
 	dir_list.bind('<Double-1>', change_path_by_click)
 	dir_list.bind('<Return>', change_path_by_click)
 	dir_list.bind('<Button-3>', dir_popup)
 
+	# Open root directory
 	path_change("root")
 
 
 def popup(event=None) -> None:
 	"""
-	Popup menu
+	Main popup menu
 	:param event:
 	"""
 	menu.post(event.x_root, event.y_root)
 
 
+# Main popup menu elements
 menu = tk.Menu(tearoff=0)
 menu.add_command(label=("Параметры" if lang == "ru" else "Parameters"), command=parameters)
 menu.add_command(label=("Информация" if lang == "ru" else "Information"), command=info)
 menu.add_command(label=("Завершение работы" if lang == "ru" else "Shutdown"), command=shd)
 menu.add_command(label=("Проводник" if lang == "ru" else "Explorer"), command=explorer)
 
-# Создание кнопок на панели управления
+# Down panel buttons
 buttons = [tk.Button(panel, font=font, text=("Параметры" if lang == "ru" else "Parameters"), command=parameters),
            tk.Button(panel, font=font, text=("Информация" if lang == "ru" else "Information"), command=info),
            tk.Button(panel, font=font, text=("Завершение работы" if lang == "ru" else "Shutdown"), command=shd),
@@ -303,12 +321,13 @@ buttons = [tk.Button(panel, font=font, text=("Параметры" if lang == "ru
 for button in buttons:
 	button.pack(side="left", anchor="sw")
 
+# Main popup menu bind
 root.bind("<Button-3>", popup)
 
 
 def sys_start() -> None:
 	"""
-	Main
+	Start system and set settings
 	"""
 	global lang
 	color = get_setting("bg_color")
@@ -318,11 +337,15 @@ def sys_start() -> None:
 
 
 def main():
+	"""
+	Start sys_start and play startup sound
+	"""
 	pygame.mixer.init()
 	pygame.mixer.music.load("root\\System\\sounds\\start.wav")
 	pygame.mixer.music.play()
 	sys_start()
 
 
+# Main run
 if __name__ == '__main__':
 	main()

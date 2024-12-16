@@ -1,6 +1,12 @@
 # coding=utf-8
 """"
-Plasma OS core
+
+Plasma OS Visual
+
+Plasma OS core module
+
+Made by Plasm inc.
+
 """
 import os
 import shutil
@@ -8,17 +14,20 @@ import shutil
 
 def ls(path: str) -> list[str]:
 	"""
-	ls func
-	:param path:
-	:return:
+	List of all objects in directory
+	:param path: Directory path to look
+	:return: List with objects inside
 	"""
 	return os.listdir(path)
 
 
 def cr(path: str) -> None:
 	"""
-	cr func
-	:param path:
+	Create file (NOT DIRECTORY)
+
+	FileExistsError - File is already exists
+	ValueError - Invalid file name
+	:param path: Path to create FILE
 	"""
 	if os.path.exists(path):
 		raise FileExistsError("File is already exists")
@@ -30,17 +39,19 @@ def cr(path: str) -> None:
 		pass
 
 
+def gt(path: str, to: str = "", back: bool = False, ignore_ex: bool = False) -> str:
+	"""
+	Merge, edit paths
 
-def gt(path:str, to: str="", back: bool = False, ignore_ex: bool = False) -> str:
+	OSError - cant go beyond root directory
+	FileNotFoundError - directory does not exist
+	:param ignore_ex: Ignore existing of file. Needs to merge paths
+	:param path: Path where to start
+	:param to: Directory name to go in
+	:param back: Go back in file system
+	:return: Returns new path
 	"""
-	gt func
-	:param ignore_ex:
-	:param path:
-	:param to:
-	:param back:
-	:return:
-	"""
-	if os.path.exists(path + "\\" + to) and (not ignore_ex) and not back:
+	if os.path.exists(path + "\\" + to) and not ignore_ex and not back:
 		return path + "\\" + to
 
 	if ignore_ex and not back:
@@ -58,8 +69,10 @@ def gt(path:str, to: str="", back: bool = False, ignore_ex: bool = False) -> str
 
 def mdir(path: str) -> None:
 	"""
-	mdir func
-	:param path:
+	Make directory (NOT FILE)
+
+	FileExistsError - directory with that name already exists
+	:param path: Path where to create directory
 	"""
 	if not os.path.exists(path):
 		os.mkdir(path)
@@ -70,8 +83,10 @@ def mdir(path: str) -> None:
 
 def delete(path: str) -> None:
 	"""
-	del func
-	:param path:
+	Delete object
+
+	FileNotFoundError - object to delete doesn't exist
+	:param path: Path to object to delete
 	"""
 	if os.path.exists(path):
 		if os.path.isfile(path):
@@ -85,9 +100,12 @@ def delete(path: str) -> None:
 
 def mv(from_path: str, to_path: str) -> None:
 	"""
-	mv func
-	:param from_path:
-	:param to_path:
+	Move file/directory
+
+	FileNotFoundError - Object to move not found/There is no final path
+	FileExistsError - The endpoint already has such an object
+	:param from_path: Path to object to move
+	:param to_path: Path where to move object
 	"""
 	if not os.path.exists(from_path):
 		raise FileNotFoundError("File not found")
@@ -104,9 +122,12 @@ def mv(from_path: str, to_path: str) -> None:
 
 def copy(from_path: str, to_path: str) -> None:
 	"""
-	copy func
-	:param from_path:
-	:param to_path:
+	Copy object
+
+	FileNotFoundError - Object to move not found/There is no final path
+	FileExistsError - The endpoint already has such an object
+	:param from_path: Path to object to copy
+	:param to_path: Path where to copy object
 	"""
 	if not os.path.exists(from_path):
 		raise FileNotFoundError("File not found")
@@ -123,9 +144,9 @@ def copy(from_path: str, to_path: str) -> None:
 
 def ren(path: str, name: str) -> None:
 	"""
-	ren func
-	:param path:
-	:param name:
+	Rename object
+	:param path: Path to object to rename
+	:param name: New name (Only name, not path)
 	"""
 	if not os.path.exists(path):
 		raise FileNotFoundError("File not found")

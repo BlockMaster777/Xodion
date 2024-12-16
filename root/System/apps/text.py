@@ -37,12 +37,10 @@ def main_start(path: str, is_new: bool) -> None:
 	SPECc = "#7000e0"
 	font = "Consolas 13"
 
-	repl = [["""(^| )(and|as|assert|break|class|continue|def|del|elif|else|except|False|finally|for|from|global|import
-			|if|in|is|lambda|None|nonlocal|not|or|pass|raise|return|True|try|while|with|yield|_|case|match|type)($| )""",
-	         SPECc], ['".*?"', STRc], ['\".*?\"', STRc], ['#.*?$', COMMENTc]]
+	repl = [["""(^| )(and|as|assert|break|class|continue|def|del|elif|else|except|False|finally|for|from|global|import|
+	if|in|is|lambda|None|nonlocal|not|or|pass|raise|return|True|try|while|with|yield|_|case|match|type)($| )""", SPECc], ['".*?"', STRc], ['\".*?\"', STRc], ['#.*?$', COMMENTc]]
 
-	editarea = Text(text_ed_win, background=BGc, foreground=TEXTc, insertbackground="#ffffff", relief=FLAT,
-	                borderwidth=2, font=font)
+	editarea = Text(text_ed_win, background=BGc, foreground=TEXTc, insertbackground="#ffffff", relief=FLAT, borderwidth=2, font=font)
 
 	editarea.pack(fill=BOTH, expand=1)
 
