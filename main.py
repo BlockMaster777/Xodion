@@ -133,7 +133,7 @@ def explorer() -> None:
 	exp_win.title(("Проводник" if lang == "ru" else "Explorer"))
 	exp_win.attributes("-topmost", True)
 	exp_win.resizable(False, False)
-	exp_win.geometry('400x250')
+	exp_win.geometry('400x245')
 	exp_win.iconbitmap("root/System/icons/explorer.ico")
 
 	# Tk variables
@@ -167,25 +167,21 @@ def explorer() -> None:
 			path_change(ren_file.get())
 
 
-		# Rename window elements
 		ren_win = tk.Toplevel(exp_win)
 		ren_win.title("Переименовать" if lang == "ru" else "Rename")
-		# TODO make standard settings
-		# TODO make icon for rename and etc.
+		ren_win.attributes("-topmost", True)
+		ren_win.resizable(False, False)
+		ren_win.geometry('250x170')
+		ren_win.iconbitmap("root/System/icons/edit.ico")
 
 		# Rename window elements
 		ren_new_name = tk.StringVar(ren_win, "", 'ren_new_name')
 		ren_file = tk.StringVar(ren_win, "", 'path')
-		ren_path_label = tk.Label(ren_win, font=font, text=("Введите путь файла для переименования" if lang == "ru" else "Enter the file path for rename"))
-		ren_path_label.pack()
-		ren_entry_file = tk.Entry(ren_win, textvariable=ren_file)
-		ren_entry_file.pack()
-		ren_label_name = tk.Label(ren_win, font=font, text=("Введите новое название" if lang == "ru" else "Enter the new name"))
-		ren_label_name.pack()
-		ren_entry_name = tk.Entry(ren_win, textvariable=ren_new_name)
-		ren_entry_name.pack()
-		ren_button = tk.Button(ren_win, font=font, text=("Переименовать" if lang == "ru" else "Rename"), command=newname)
-		ren_button.pack()
+		tk.Label(ren_win, font=font, text=("Введите путь файла для переименования" if lang == "ru" else "Enter the file path for rename")).place(x=10, y=10)
+		tk.Entry(ren_win, textvariable=ren_file).place(x=10, y=40)
+		tk.Label(ren_win, font=font, text=("Введите новое название" if lang == "ru" else "Enter the new name")).place(x=10, y=70)
+		tk.Entry(ren_win, textvariable=ren_new_name).place(x=10, y=100)
+		tk.Button(ren_win, font=font, text=("Переименовать" if lang == "ru" else "Rename"), command=newname).place(x=10, y=130)
 
 
 	def change_path_by_click(*event):
@@ -241,6 +237,7 @@ def explorer() -> None:
 		new_win.resizable(False, False)
 		new_win.attributes("-topmost", True)
 		new_win.title(("Новый объект" if lang == "ru" else "New object"))
+		new_win.iconbitmap("root/System/icons/add.ico")
 
 
 		def new_file_or_folder():
@@ -280,12 +277,11 @@ def explorer() -> None:
 	current_path.trace('w', path_change)
 
 	# Explorer elements
-	# TODO remake design
-	tk.Button(exp_win, text=("Назад" if lang == "ru" else "Back"), command=go_back).place(x=5, y=5)
+	tk.Button(exp_win, text=("Назад" if lang == "ru" else "Back"), command=go_back).place(x=15, y=5)
 
-	tk.Entry(exp_win, textvariable=current_path).place(x=65, y=10)
+	tk.Entry(exp_win, textvariable=current_path, width=54).place(x=65, y=10)
 
-	dir_list = tk.Listbox(exp_win)
+	dir_list = tk.Listbox(exp_win, width=64, selectbackground="#9933FF", height=12)
 	dir_list.place(x=5, y=40)
 
 	# Hotkey binds

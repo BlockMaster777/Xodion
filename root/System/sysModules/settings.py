@@ -16,14 +16,14 @@ def save_settings(setting: str, val: int or str) -> None:
 	:param val: Value of setting
 	:param setting: Name of setting
 	"""
-	with open("../settings.properties", encoding="utf-8") as f:
+	with open("root\\System\\settings.properties", encoding="utf-8") as f:
 		lines = f.readlines()
 		for i, line in enumerate(lines):
 			if line.startswith(setting + '='):
 				lines[i] = f"{setting}={val}\n"
 				break
 
-	with open("../settings.properties", "w", encoding="utf-8") as f:
+	with open("root\\System\\settings.properties", "w", encoding="utf-8") as f:
 		f.writelines(lines)
 
 
@@ -32,7 +32,7 @@ def get_setting(setting: str) -> str:
 	Get setting in settings.properties
 	:param setting: Name of setting
 	"""
-	with open("../settings.properties", encoding="utf-8") as f:
+	with open("root\\System\\settings.properties", encoding="utf-8") as f:
 		lines = f.readlines()
 		for i, line in enumerate(lines):
 			line_s = line.split("=")
