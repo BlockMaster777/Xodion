@@ -29,25 +29,16 @@ root = tk.Tk()
 root.title("Plasma")
 root.geometry("1000x500")
 root.attributes("-fullscreen", True)
-root.iconbitmap("root/System/icons/plasma.ico")
+root.iconbitmap("root/System/img/icons/new/plasma.ico")
 
 # Constants
 font = "Arial 10"
 lang = get_setting("lang")
+Version = "2.7"
 
 # Down panel
 panel = tk.Frame(root)
 panel.pack(side='bottom', fill="x")
-
-
-def shd():
-	"""
-	Quit function
-	"""
-	pygame.mixer.init()
-	pygame.mixer.music.load("root\\System\\sounds\\tada.wav")
-	pygame.mixer.music.play()
-	quit()
 
 
 def update_time():
@@ -65,18 +56,41 @@ time.pack(padx=10, side="right")
 update_time()
 
 
+def error(text: str) -> None:
+	"""
+	Dialog window with tada sound
+	:param text: text to show user
+	"""
+	err_win = tk.Toplevel(root)
+	err_win.title(("Предупреждение" if lang == "ru" else "Warning"))
+	err_win.geometry(f"500x120+{(root.winfo_screenwidth() // 2) - 500 // 2}+{(root.winfo_screenheight() // 2) - 120 // 2}")
+	err_win.resizable(False, False)
+	err_win.attributes("-topmost", True)
+	err_win.overrideredirect(True)
+	err_win.iconbitmap("root/System/img/icons/new/warning.ico")
+
+	# Sound
+	pygame.mixer.init()
+	pygame.mixer.music.load("root/System/sounds/tada.wav")
+	pygame.mixer.music.play()
+
+	# Elements
+	tk.Label(err_win, text=text, font="Arial 15").place(x=10, y=10)
+	tk.Button(err_win, text=("ОК" if lang == "ru" else "OK"), font=font, command=err_win.destroy).place(x=10, y=70)
+
+
 def parameters() -> None:
 	"""
 	Param window
 	"""
 	global lang
 
-	window_par = tk.Toplevel(root)
-	window_par.title(("Параметры" if lang == "ru" else "Parameters"))
-	window_par.geometry("300x100")
-	window_par.resizable(False, False)
-	window_par.attributes("-topmost", True)
-	window_par.iconbitmap("root/System/icons/settings.ico")
+	par_win = tk.Toplevel(root)
+	par_win.title(("Параметры" if lang == "ru" else "Parameters"))
+	par_win.geometry("400x200")
+	par_win.resizable(False, False)
+	par_win.attributes("-topmost", True)
+	par_win.iconbitmap("root/System/img/icons/new/settings.ico")
 
 
 	def choice_color() -> None:
@@ -93,36 +107,23 @@ def parameters() -> None:
 		Choice language function
 		"""
 		global lang
-
 		if lang == "en":
 			lang = "ru"
-		if lang == "ru":
+		elif lang == "ru":
 			lang = "en"
-		print(lang)
 		save_settings("lang", lang)
+		error(("Перезапустите ОС для применения!" if lang == "ru" else "Restart OS to apply!"))
 
 
 	# Param window elements
-	tk.Label(window_par, text=("Задний фон" if lang == "ru" else "Background"), font=font).place(x=10, y=5)
-	tk.Button(window_par, font=font, text=("Выбор цвета" if lang == "ru" else "Choice color"), command=choice_color).place(x=10, y=30)
-	tk.Label(window_par, text=("Язык" if lang == "ru" else "Language"), font=font).place(x=100, y=5)
-	tk.Label(window_par, text=("Перезапустите для применения" if lang == "ru" else "Restart to apply"), font=font).place(x=100, y=55)
-	tk.Button(window_par, font=font, text=("English" if lang == "ru" else "Русский"), command=choice_lang).place(x=100, y=30)
+	tk.Label(par_win, text=("Задний фон" if lang == "ru" else "Background"), font=font).place(x=10, y=5)
+	tk.Button(par_win, font=font, text=("Выбор цвета" if lang == "ru" else "Choice color"), command=choice_color).place(x=10, y=30)
+	tk.Label(par_win, text=("Язык" if lang == "ru" else "Language"), font=font).place(x=100, y=5)
+	tk.Button(par_win, font=font, text=("English" if lang == "ru" else "Русский"), command=choice_lang).place(x=100, y=30)
 
-
-def info() -> None:
-	"""
-	Info window
-	"""
-	# TODO move info to parameters window and remove this window
-	global lang
-	inf_win = tk.Toplevel(root)
-	inf_win.title(("Информация" if lang == "ru" else "Information"))
-	inf_win.geometry("300x100")
-	inf_win.resizable(False, False)
-	inf_win.attributes("-topmost", True)
-	inf_win.iconbitmap("root/System/icons/info.ico")
-	tk.Label(inf_win, font=font, text=("Plasma OS Visual V 2.6.5\nОт Plasm Inc." if lang == "ru" else "Plasma OS Visual\nV 2.6.5\nBy Plasm Inc.")).pack()
+	# Info elements
+	tk.Label(par_win, font="Arial 13", text=(f"Plasma OS Visual V {Version}" if lang == "ru" else f"Plasma OS Visual V {Version}")).place(x=10, y=120)
+	tk.Label(par_win, font="Arial 13", text=("От Plasm Inc." if lang == "ru" else "By Plasm Inc.")).place(x=10, y=150)
 
 
 def explorer() -> None:
@@ -134,7 +135,7 @@ def explorer() -> None:
 	exp_win.attributes("-topmost", True)
 	exp_win.resizable(False, False)
 	exp_win.geometry('400x245')
-	exp_win.iconbitmap("root/System/icons/explorer.ico")
+	exp_win.iconbitmap("root/System/img/icons/new/explorer.ico")
 
 	# Tk variables
 	new_file_name = tk.StringVar(exp_win, "", 'new_name')
@@ -171,8 +172,8 @@ def explorer() -> None:
 		ren_win.title("Переименовать" if lang == "ru" else "Rename")
 		ren_win.attributes("-topmost", True)
 		ren_win.resizable(False, False)
-		ren_win.geometry('250x170')
-		ren_win.iconbitmap("root/System/icons/edit.ico")
+		ren_win.geometry('300x170')
+		ren_win.iconbitmap("root/System/img/icons/new/edit.ico")
 
 		# Rename window elements
 		ren_new_name = tk.StringVar(ren_win, "", 'ren_new_name')
@@ -224,7 +225,7 @@ def explorer() -> None:
 			new_path = gt(current_path.get(), back=True)
 			current_path.set(new_path)
 		except OSError:  # OSError - cant go outside root directory
-			# TODO make warning
+			error(("Невозможно выйти за пределы root" if lang == "ru" else "Cant go beyond root directory"))
 			pass
 
 
@@ -237,7 +238,7 @@ def explorer() -> None:
 		new_win.resizable(False, False)
 		new_win.attributes("-topmost", True)
 		new_win.title(("Новый объект" if lang == "ru" else "New object"))
-		new_win.iconbitmap("root/System/icons/add.ico")
+		new_win.iconbitmap("root/System/img/icons/new/add.ico")
 
 
 		def new_file_or_folder():
@@ -277,9 +278,9 @@ def explorer() -> None:
 	current_path.trace('w', path_change)
 
 	# Explorer elements
-	tk.Button(exp_win, text=("Назад" if lang == "ru" else "Back"), command=go_back).place(x=15, y=5)
+	tk.Button(exp_win, text=("Назад" if lang == "ru" else "Back"), command=go_back).place(x=5, y=5)
 
-	tk.Entry(exp_win, textvariable=current_path, width=54).place(x=65, y=10)
+	tk.Entry(exp_win, textvariable=current_path, width=55).place(x=55, y=10)
 
 	dir_list = tk.Listbox(exp_win, width=64, selectbackground="#9933FF", height=12)
 	dir_list.place(x=5, y=40)
@@ -304,14 +305,12 @@ def popup(event=None) -> None:
 # Main popup menu elements
 menu = tk.Menu(tearoff=0)
 menu.add_command(label=("Параметры" if lang == "ru" else "Parameters"), command=parameters)
-menu.add_command(label=("Информация" if lang == "ru" else "Information"), command=info)
-menu.add_command(label=("Завершение работы" if lang == "ru" else "Shutdown"), command=shd)
+menu.add_command(label=("Завершение работы" if lang == "ru" else "Shutdown"), command=quit)
 menu.add_command(label=("Проводник" if lang == "ru" else "Explorer"), command=explorer)
 
 # Down panel buttons
 buttons = [tk.Button(panel, font=font, text=("Параметры" if lang == "ru" else "Parameters"), command=parameters),
-           tk.Button(panel, font=font, text=("Информация" if lang == "ru" else "Information"), command=info),
-           tk.Button(panel, font=font, text=("Завершение работы" if lang == "ru" else "Shutdown"), command=shd),
+           tk.Button(panel, font=font, text=("Завершение работы" if lang == "ru" else "Shutdown"), command=quit),
            tk.Button(panel, font=font, text=("Проводник" if lang == "ru" else "Explorer"), command=explorer)]
 
 for button in buttons:
@@ -337,7 +336,7 @@ def main():
 	Start sys_start and play startup sound
 	"""
 	pygame.mixer.init()
-	pygame.mixer.music.load("root\\System\\sounds\\start.wav")
+	pygame.mixer.music.load("root/System/sounds/start.wav")
 	pygame.mixer.music.play()
 	sys_start()
 
