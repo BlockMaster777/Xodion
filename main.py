@@ -337,7 +337,7 @@ def term() -> None:
     """
     Run term.pea
     """
-    subprocess.Popen("term.pea")
+    subprocess.Popen("root/System/apps/term.pea", cwd=os.path.dirname(os.path.abspath(__file__)), creationflags=subprocess.CREATE_NEW_CONSOLE)  # TODO make it topmost
 
 
 def popup(event=None) -> None:
