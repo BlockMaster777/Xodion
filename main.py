@@ -35,7 +35,7 @@ root.iconbitmap("root/System/img/icons/new/plasma.ico")
 # Constants
 font = "Arial 10"
 lang = get_setting("lang")
-Version = "2.9"
+Version = "2.10"
 
 # Down panel
 panel = tk.Frame(root)
@@ -240,7 +240,7 @@ def explorer() -> None:
             """
             if os.path.isfile(file_path):
                 if file_path.endswith(".pea"):
-                    subprocess.run(file_path)
+                    subprocess.Popen(file_path)
                 elif file_path.endswith(".lnk"):
                     with open(file_path, encoding="utf-8") as f:
                         touch(f.readlines()[0].rstrip())
@@ -333,6 +333,13 @@ def explorer() -> None:
     update_path()
 
 
+def term() -> None:
+    """
+    Run term.pea
+    """
+    subprocess.Popen("term.pea")
+
+
 def popup(event=None) -> None:
     """
     Main popup menu
@@ -346,11 +353,13 @@ menu = tk.Menu(tearoff=0)
 menu.add_command(label=("Параметры" if lang == "ru" else "Parameters"), command=parameters)
 menu.add_command(label=("Завершение работы" if lang == "ru" else "Shutdown"), command=sys.exit)
 menu.add_command(label=("Проводник" if lang == "ru" else "Explorer"), command=explorer)
+menu.add_command(label=("Командная строка" if lang == "ru" else "Terminal"), command=term)
 
 # Down panel buttons
 buttons = [tk.Button(panel, font=font, text=("Параметры" if lang == "ru" else "Parameters"), command=parameters),
            tk.Button(panel, font=font, text=("Завершение работы" if lang == "ru" else "Shutdown"), command=sys.exit),
-           tk.Button(panel, font=font, text=("Проводник" if lang == "ru" else "Explorer"), command=explorer)]
+           tk.Button(panel, font=font, text=("Проводник" if lang == "ru" else "Explorer"), command=explorer),
+           tk.Button(panel, font=font, text=("Командная строка" if lang == "ru" else "Terminal"), command=term)]
 
 for button in buttons:
     button.pack(side="left", anchor="sw")
