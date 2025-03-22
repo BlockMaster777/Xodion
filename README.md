@@ -1,4 +1,4 @@
-# Plasma Visual Operating System
+# Xodion Operating System
 
 ### Cool small OS for PC
 
